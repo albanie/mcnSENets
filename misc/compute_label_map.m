@@ -29,7 +29,7 @@ function compute_label_map(varargin)
 
   % read examples
   fid = fopen(valFile, 'r') ; data = textscan(fid, '%s %d') ; fclose(fid) ;
-  gtImNames = data{1} ; gtLabels = data{2} ;
+  gtImNames = data{1} ; gtLabels = data{2} + 1 ; % fix offset
 
   % trim stems for comparison
   valIdx = imdb.images.set == 2 ; valNames = imdb.images.name(valIdx) ; 

@@ -9,18 +9,19 @@ function [net, info] = cnn_imagenet_se_mcn(varargin)
   opts.continue = 1 ;
   opts.batchSize = 256 ;
   opts.model = 'SE-ResNet-50-mcn' ;
-  opts.dataDir = fullfile(vl_rootnn, 'data/datasets/ILSVRC2012') ;
   opts.modelDir = fullfile(vl_rootnn, 'data/models-import') ;
+  opts.dataDir = fullfile(vl_rootnn, 'data/datasets/ILSVRC2012') ;
+  opts.labelMap = fullfile(vl_rootnn, 'contrib/mcnSENets/misc/label_map.txt') ;
   [opts, varargin] = vl_argparse(opts, varargin) ;
 
   opts.expDir = fullfile(vl_rootnn, 'data', ['imagenet12-' opts.model]) ;
   [opts, varargin] = vl_argparse(opts, varargin) ;
 
-  opts.numFetchThreads = 12 ;
   opts.lite = false ;
+  opts.numFetchThreads = 12 ;
   opts.imdbPath = fullfile(vl_rootnn, 'data', 'imagenet12', 'imdb.mat');
-  opts.train = struct() ;
   opts = vl_argparse(opts, varargin) ;
+
   opts.train.gpus = opts.gpus ;
 
 % -------------------------------------------------------------------------
@@ -36,7 +37,8 @@ function [net, info] = cnn_imagenet_se_mcn(varargin)
     save(opts.imdbPath, '-struct', 'imdb') ;
   end
 
-  imdb = updateLabelMap(imdb) ;
+  % remap labels to match the order used in training
+  imdb = updateLabelMap(imdb, opts) ;
 
 % -------------------------------------------------------------------------
 %                                                             Prepare model
@@ -59,9 +61,7 @@ function [net, info] = cnn_imagenet_se_mcn(varargin)
 function dag = load_model(modelDir, name)
 % -------------------------------------------------------------------------
   modelPath = fullfile(modelDir, sprintf('%s.mat', name)) ;
-  if ~exist(modelDir, 'dir') 
-    mkdir(modelDir) ;
-  end
+  if ~exist(modelDir, 'dir') , mkdir(modelDir) ; end
 
   if ~exist(modelPath, 'file')
     fprintf('Downloading the %s model ... this may take a while\n', name) ;
@@ -81,8 +81,7 @@ function dag = load_model(modelDir, name)
 function fn = getBatchFn(opts, meta)
 % -------------------------------------------------------------------------
   bopts = struct('useGpu', numel(opts.train.gpus) > 0, ...
-                 'imageSize', meta.normalization.imageSize(1:2), ...
-                 'cropSize', meta.normalization.cropSize) ;
+                 'imageSize', meta.normalization.imageSize(1:2)) ;
   fn = @(x,y) eval_get_batch(bopts,x,y) ;
 
 % -------------------------------------------------------------------------
@@ -94,6 +93,14 @@ function varargout = eval_get_batch(opts, imdb, batch)
     labels = imdb.images.label(batch) ;
     varargout{1} = {'data', data, 'label', labels} ;
   end
+
+% ----------------------------------------
+function imdb = updateLabelMap(imdb, opts) 
+% ----------------------------------------
+  labelMap = importdata(opts.labelMap) ; 
+  keep = imdb.images.label ~= 0 ;
+  newLabels = labelMap(imdb.images.label(keep)) ;
+  imdb.images.label(keep) = newLabels ;
 
 % -------------------------------------------------
 function data = getImageBatch(imagePaths, varargin)

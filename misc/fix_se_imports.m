@@ -2,7 +2,9 @@ function fix_se_imports(varargin)
 %FIX_SE_IMPORTS - clean up imported caffe models
 %   FIX_SE_IMPORTS performs some additional clean up work
 %   on models imported from caffe to ensure that they are
-%   consistent with matconvnet conventions
+%   consistent with matconvnet conventions.  It also adds 
+%   informaiton about the imagenet dataset used for training to 
+%   each model to facilitate easier use in deployment
 %
 %  TODO: It is much less brittle to try to fix these issues
 %  in the caffe import script. The functionality below should be 
@@ -11,9 +13,11 @@ function fix_se_imports(varargin)
 % Copyright (C) 2017 Samuel Albanie
 % Licensed under The MIT License [see LICENSE.md for details]
 
-  %opts.modelName = 'SE-ResNet-50-mcn.mat' ;
+  opts.imdbPath = fullfile(vl_rootnn, 'data/imagenet12/imdb.mat') ;
   opts.modelDir = fullfile(vl_rootnn, 'data/models-import') ;
   opts = vl_argparse(opts, varargin) ;
+
+  imdb = load(opts.imdbPath) ;
 
   % select model
   res = dir(fullfile(opts.modelDir, '*.mat')) ; modelNames = {res.name} ;
@@ -35,8 +39,15 @@ function fix_se_imports(varargin)
       net.params(ii).name = strrep(net.params(ii).name, '/', '_') ;
     end
 
-    % fix meta imageSize
-    net.meta.normalization.imageSize = [224 224 3] ;
+    % fix meta 
+    fprintf('adding info to %s (%d/%d)\n', modelPath, mm, numel(modelNames)) ;
+    net.meta.classes = imdb.classes ;
+    if contains(modelPath, 'Inception')
+      imSize = [299 299 3] ;
+    else
+      imSize = [224 224 3] ;
+    end
+    net.meta.normalization.imageSize = imSize ;
     net = dagnn.DagNN.loadobj(net) ; 
     net = net.saveobj() ; save(modelPath, '-struct', 'net') ; %#ok
   end
