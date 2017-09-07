@@ -2,7 +2,7 @@ Squeeze-and-Excitation Networks
 ---
 
 This directory contains code to evaluate the classification models released by
-the authors of the paper:
+the authors of the [paper](https://arxiv.org/abs/1709.01507):
 
 ```
 Squeeze-and-Excitation Networks, 
