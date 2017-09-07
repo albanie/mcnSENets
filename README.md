@@ -20,7 +20,7 @@ Each of the Squeeze-and-Excitation networks released by the authors has been imp
 
 The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  
 
-The result of this evaluation for each pretrained model can be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models).
+The result of this evaluation for each pretrained model can be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models). 
 
 
 ### Installation
@@ -32,3 +32,5 @@ package manager:
 vl_contrib('install', 'mcnSENets') ;
 vl_contrib('setup', 'mcnSENets') ;
 ```
+
+**Note:** The ordering of the imagenet labels differs from the standard ordering commonly found in caffe, pytorch etc.  These are remapped automically in the evaluation code.  The mapping between the synsets indices can be found [here](misc/label_map.txt).
