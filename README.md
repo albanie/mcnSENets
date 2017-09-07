@@ -20,7 +20,7 @@ Each of the Squeeze-and-Excitation networks released by the authors has been imp
 
 The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  
 
-The result of this evaluation for each pretrained model can be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models). 
+The result of this evaluation for each pretrained model can also be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models). 
 
 
 ### Installation
