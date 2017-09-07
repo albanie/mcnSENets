@@ -66,7 +66,7 @@ function dag = load_model(modelDir, name)
   if ~exist(modelPath, 'file')
     fprintf('Downloading the %s model ... this may take a while\n', name) ;
     base = 'http://www.robots.ox.ac.uk/~albanie' ;
-    url = sprintf('%s/models/pytorch-imports/%s.mat', base, name) ;
+    url = sprintf('%s/models/se-nets/%s.mat', base, name) ;
     urlwrite(url, modelPath) ;
   end
 
