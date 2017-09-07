@@ -21,7 +21,7 @@ Each of the Squeeze-and-Excitation networks released by the authors has been imp
 The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  The results of the evaluations are given below - note there are minor differences to the original scores (listed under `official`) due to variations in preprocessing (full details of the evaluation can be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)):
 
 
-| model	                    | top-1 error (offical)	| top-5 error (official) |
+| model	  | top-1 error (offical)	| top-5 error (official) |
 |---------------------------|-------------------------|------------------------|
 | SE-ResNet-50-mcn	        | 22.30 (22.37) | 6.30  (6.36) |
 | SE-ResNet-101-mcn	        | 21.59 (21.75) | 5.81  (5.72) |
@@ -31,7 +31,7 @@ The `run_se_benchmarks.m` script will evaluate each of these models on the Image
 | SE-ResNeXt-101-32x4d-mcn  | 19.73 (19.81) | 4.98  (4.96) |
 | SENet-mcn	                | 18.67 (18.68) | 4.50  (4.47) |
 
-To give some idea of the relative computational burdens of model, esimates are provided below:
+There may be some difference in how the Inception network should be preprocessed relative to the others (this model exhibits a noticeable degradation). To give some idea of the relative computational burdens of each model, esimates are provided below:
 
 
 | model | input size | param memory | feature memory | flops |
