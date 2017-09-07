@@ -18,11 +18,9 @@ Each of the Squeeze-and-Excitation networks released by the authors has been imp
 
 [SE Networks](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)
 
-The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  
+The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  The accuracy of each pretrained model can also be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models). 
 
-The result of this evaluation for each pretrained model can also be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models). 
-
-To relative computational burdens of the models are estimated below:
+To give some idea of the relative computational burdens of model, esimates are provided below:
 
 
 | model | input size | param memory | feature memory | flops |
@@ -36,9 +34,8 @@ To relative computational burdens of the models are estimated below:
 | [SE-BN-Inception](reports/SE-BN-Inception.md) | 224 x 224 | 46 MB | 43 MB | 2 GFLOPs|
 
 
-Each is number corresponds to a single element batch. This table was computed
-with [convnet-burden](https://github.com/albanie/convnet-burden) (which contains a list of the assumptions used to perform
-the estimate). Clicking on the model name should give more details.
+Each estimate corresponds to computing a single element batch. This table was generated
+with [convnet-burden](https://github.com/albanie/convnet-burden) - the repo has a list of the assumptions used produce estimations. Clicking on the model name should give a more detailed breakdown.
 
 
 ### Installation
