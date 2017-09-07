@@ -10,7 +10,8 @@ Jie Hu, Li Shen, Gang Sun, arxiv 2017
 ```
 
 This code is based on the [original](https://github.com/hujie-frank/SENet) 
-implementation (which uses caffe).
+implementation (which uses caffe). Training code will be added once the 
+experimental results have been reproduced.
 
 ### Pretrained Models
 
