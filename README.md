@@ -14,7 +14,7 @@ implementation (which uses caffe).
 
 ### Pretrained Models
 
-Each of the Squeeze-and-Excitation networks released by the authors has been imported into MatConvNet and can be downloaded here:
+Each of the Squeeze-and-Excitation networks released by the authors has been imported into [MatConvNet](https://github.com/vlfeat/matconvnet) and can be downloaded here:
 
 [SE Networks](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)
 
