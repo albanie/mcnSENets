@@ -24,23 +24,24 @@ function y = vl_nnreshape(x, shape, varargin)
 %   block projected onto DZDY. DZDX and DZDY have the same dimensions
 %   as X and Y respectively.
 %
-% Copyright (C) 2017 Samuel Albanie and Andrea Vedaldi.
+% Copyright (C) 2017 Samuel Albanie and Andrea Vedaldi
 % Licensed under The MIT License [see LICENSE.md for details]
 
-[~, dzdy] = vl_argparsepos(struct(), varargin) ;
+  [~, dzdy] = vl_argparsepos(struct(), varargin) ;
 
-if isnumeric(shape) % apply caffe style conventions if needed
-  shape_ = num2cell(shape) ;
-  k = find(shape == -1) ; if k, shape_{k} = [] ; end
-  k = find(shape == 0) ;
-  if k, rep = arrayfun(@(i) {size(x,i)}, k) ; shape_(k) = rep ; end
-  shape = shape_ ;
-end
+  if isnumeric(shape) % apply caffe style conventions if needed
+    shape_ = num2cell(shape) ;
+    if numel(shape_) == 2, shape_{3} = [] ; end
+    k = find(shape == -1) ; if k, shape_{k} = [] ; end
+    k = find(shape == 0) ;
+    if k, rep = arrayfun(@(i) {size(x,i)}, k) ; shape_(k) = rep ; end
+    shape = shape_ ;
+  end
 
-batchSize = size(x, 4);
+  batchSize = size(x, 4);
 
-if isempty(dzdy)
-  y = reshape(x, shape{1}, shape{2}, shape{3}, batchSize) ;
-else
-  y = reshape(dzdy{1}, size(x)) ;
-end
+  if isempty(dzdy)
+    y = reshape(x, shape{1}, shape{2}, shape{3}, batchSize) ;
+  else
+    y = reshape(dzdy{1}, size(x)) ;
+  end

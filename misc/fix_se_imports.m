@@ -42,12 +42,7 @@ function fix_se_imports(varargin)
     % fix meta 
     fprintf('adding info to %s (%d/%d)\n', modelPath, mm, numel(modelNames)) ;
     net.meta.classes = imdb.classes ;
-    if contains(modelPath, 'Inception')
-      imSize = [299 299 3] ;
-    else
-      imSize = [224 224 3] ;
-    end
-    net.meta.normalization.imageSize = imSize ;
+    net.meta.normalization.imageSize = [224 224 3] ;
     net = dagnn.DagNN.loadobj(net) ; 
     net = net.saveobj() ; save(modelPath, '-struct', 'net') ; %#ok
   end
