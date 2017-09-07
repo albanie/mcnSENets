@@ -31,6 +31,7 @@ package manager:
 ```
 vl_contrib('install', 'mcnSENets') ;
 vl_contrib('setup', 'mcnSENets') ;
+vl_contrib('test', 'mcnSENets') ; % optional
 ```
 
 **Note:** The ordering of the imagenet labels differs from the standard ordering commonly found in caffe, pytorch etc.  These are remapped automically in the evaluation code.  The mapping between the synsets indices can be found [here](misc/label_map.txt).
