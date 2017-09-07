@@ -14,7 +14,7 @@ implementation (which uses caffe).
 
 ### Pretrained Models
 
-Each of the Squeeze-and-Excitation networks released by the authors has been imported into MatConvNet and can be downloaded here:
+Each of the Squeeze-and-Excitation networks released by the authors has been imported into [MatConvNet](https://github.com/vlfeat/matconvnet) and can be downloaded here:
 
 [SE Networks](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)
 
@@ -49,6 +49,7 @@ package manager:
 ```
 vl_contrib('install', 'mcnSENets') ;
 vl_contrib('setup', 'mcnSENets') ;
+vl_contrib('test', 'mcnSENets') ; % optional
 ```
 
 **Note:** The ordering of the imagenet labels differs from the standard ordering commonly found in caffe, pytorch etc.  These are remapped automically in the evaluation code.  The mapping between the synsets indices can be found [here](misc/label_map.txt).

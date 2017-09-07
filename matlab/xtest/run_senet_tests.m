@@ -6,8 +6,8 @@ function run_senet_tests(varargin)
 
 opts.cpu = true ;
 opts.gpu = false ;
-opts.single = true ;
-opts.double = false ;
+opts.single = false ; % less room for error
+opts.double = true ;
 opts.command = 'nn' ;
 opts = vl_argparse(opts, varargin) ;
 
