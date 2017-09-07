@@ -36,5 +36,5 @@ function y = vl_nnglobalpool(x, varargin)
     end
   else
     base = 1 / (size(x,1) * size(x,2)) * ones(size(x), 'like', x) ;
-    y = bsxfun(@times, base, dzdy) ;
+    y = bsxfun(@times, base, dzdy{1}) ;
   end
