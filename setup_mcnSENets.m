@@ -7,3 +7,4 @@ function setup_mcnSENets()
 
   root = fileparts(mfilename('fullpath')) ;
   addpath(root, [root '/matlab'], [root '/benchmarks'], [root '/misc']) ;
+  addpath(fullfile(vl_rootnn, 'examples/imagenet')) ;
