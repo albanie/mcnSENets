@@ -48,6 +48,18 @@ There may be some difference in how the Inception network should be preprocessed
 Each estimate corresponds to computing a single element batch. This table was generated
 with [convnet-burden](https://github.com/albanie/convnet-burden) - the repo has a list of the assumptions used produce estimations. Clicking on the model name should give a more detailed breakdown.
 
+### Dependencies
+
+This code uses the following two modules: 
+
+* [autonn](https://github.com/vlfeat/autonn) - a wrapper for MatConvNet
+* [mcnExtraLayers](https://github.com/albanie/mcnExtraLayers) - some useful additional layers
+
+Both of these can be setup directly with `vl_contrib` (i.e. run `vl_contrib install <module-name>` then `vl_contrib setup <module-name>`).
+
+### Notes
+
+
 
 ### Installation
 
@@ -60,10 +72,5 @@ vl_contrib('setup', 'mcnSENets') ;
 vl_contrib('test', 'mcnSENets') ; % optional
 ```
 
-### Dependencies
-
-This code uses the **autonn** wrapper for MatConvNet, which can also be installed with `vl_contrib` (instructions [here](https://github.com/vlfeat/autonn)).
-
-### Notes
 
 The ordering of the imagenet labels differs from the standard ordering commonly found in caffe, pytorch etc.  These are remapped automically in the evaluation code.  The mapping between the synsets indices can be found [here](misc/label_map.txt).
