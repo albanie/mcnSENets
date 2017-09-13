@@ -10,7 +10,6 @@ function [net, info] = cnn_imagenet_se(varargin)
 % Licensed under The MIT License [see LICENSE.md for details]
 
   opts.gpus = 4 ;
-  opts.network = [] ;
   opts.lite = false ;
   opts.numFetchThreads = 12 ;
   opts.modelType = 'alexnet' ;
