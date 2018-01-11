@@ -16,7 +16,7 @@ implementation (which uses caffe).
 
 Each of the Squeeze-and-Excitation networks released by the authors has been imported into [MatConvNet](https://github.com/vlfeat/matconvnet) and can be downloaded here:
 
-[SE Networks](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)
+[SE Networks](http://www.robots.ox.ac.uk/~albanie/mcn-models.html#se-models)
 
 The `run_se_benchmarks.m` script will evaluate each of these models on the ImageNet validation set. It will download the models automatically if you have not already done so (note that these evaluations require a copy of the imagenet data).  The results of the evaluations are given below - note there are minor differences to the original scores (listed under `official`) due to variations in preprocessing (full details of the evaluation can be found [here](http://www.robots.ox.ac.uk/~albanie/models.html#se-models)):
 
