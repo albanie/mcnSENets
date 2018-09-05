@@ -30,7 +30,8 @@ function [net, info] = cnn_imagenet_se_mcn(varargin)
 % -------------------------------------------------------------------------
 
   if exist(opts.imdbPath, 'file')
-    imdb = load(opts.imdbPath) ;
+    imdb = quick_fetch_gs(opts.imdbPath) ;
+    %imdb = load(opts.imdbPath) ;
     imdb.imageDir = fullfile(opts.dataDir, 'images');
   else
     imdb = cnn_imagenet_setup_data('dataDir', opts.dataDir, 'lite', opts.lite) ;
@@ -75,7 +76,13 @@ function dag = load_model(modelDir, name)
     urlwrite(url, modelPath) ;
   end
 
-  dag = dagnn.DagNN.loadobj(load(modelPath)) ;
+  tmp = quick_fetch_gs(modelPath) ;
+  if ~isfield(tmp, 'params')
+    dag = dagnn.DagNN.fromSimpleNN(tmp) ;
+  else
+    dag = dagnn.DagNN.loadobj(tmp) ;
+  end
+  %dag = dagnn.DagNN.loadobj(load(modelPath)) ;
   if isa(dag.layers(end).block, 'dagnn.SoftMax')
     dag.renameVar(dag.layers(end).outputs, 'prediction') ;
   else % add softmax to logits if softmax isn't yet present
@@ -92,6 +99,9 @@ function fn = getBatchFn(opts, meta)
 % -------------------------------------------------------------------------
   bopts = struct('useGpu', numel(opts.train.gpus) > 0, ...
                  'imageSize', meta.normalization.imageSize(1:2)) ;
+  if isfield(meta.normalization, 'stdIm')
+    bopts.std = meta.normalization.stdIm ;
+  end
   fn = @(x,y) eval_get_batch(bopts,x,y) ;
 
 % -------------------------------------------------------------------------
@@ -115,38 +125,39 @@ function imdb = updateLabelMap(imdb, opts)
 % -------------------------------------------------
 function data = getImageBatch(imagePaths, varargin)
 % -------------------------------------------------
-% GETIMAGEBATCH  Load and jitter a batch of images
-opts.useGpu = false ;
-opts.prefetch = false ;
-opts.numThreads = 10 ;
+	% GETIMAGEBATCH  Load and jitter a batch of images
+	opts.useGpu = false ;
+	opts.prefetch = false ;
+	opts.numThreads = 10 ;
 
-% Options that were used during PyTorch training
-% Note: that normalisation must occur after the pixel
-% values have been rescaled to [0,1]
-opts.cropSize = 224 / 256 ;
-opts.imageSize = [224, 224] ;
-opts.meanImg = [123, 117, 104] ;
-%opts.std = [0.229, 0.224, 0.225] ;
-opts = vl_argparse(opts, varargin);
+	% Options that were used during PyTorch training
+	% Note: that normalisation must occur after the pixel
+	% values have been rescaled to [0,1]
+	opts.cropSize = 224 / 256 ;
+	opts.imageSize = [224, 224] ;
+	opts.meanImg = [123, 117, 104] ;
+  opts.std = [1, 1, 1] ;
+	opts = vl_argparse(opts, varargin);
 
-args{1} = {imagePaths, ...
-           'NumThreads', opts.numThreads, ...
-           'Pack', ...
-           'Interpolation', 'bilinear', ... % use bilinear to reproduce trainig resize
-           'Resize', opts.imageSize(1:2), ...
-           'CropSize', opts.cropSize, ...
-           'CropAnisotropy', [1 1], ... % preserve aspect ratio
-           'CropLocation', 'center'} ; % centre crop for testing
+	args{1} = {imagePaths, ...
+						 'NumThreads', opts.numThreads, ...
+						 'Pack', ...
+						 'Interpolation', 'bilinear', ... % use bilinear to reproduce trainig resize
+						 'Resize', opts.imageSize(1:2), ...
+						 'CropSize', opts.cropSize, ...
+						 'CropAnisotropy', [1 1], ... % preserve aspect ratio
+						 'CropLocation', 'center'} ; % centre crop for testing
 
-if opts.useGpu, args{end+1} = {'Gpu'} ; end
-args = horzcat(args{:}) ;
+	if opts.useGpu, args{end+1} = {'Gpu'} ; end
+	args = horzcat(args{:}) ;
 
-if opts.prefetch
-  vl_imreadjpeg(args{:}, 'prefetch') ;
-  data = [] ;
-else
-  data = vl_imreadjpeg(args{:}) ;
-  data = bsxfun(@minus, data{1}, permute(opts.meanImg, [1 3 2])) ;
-  %data = data{1} / 255 ; % scale to (almost) [0,1]
-  %data = bsxfun(@rdivide, data, permute(opts.std, [1 3 2])) ;
-end
+	if opts.prefetch
+		vl_imreadjpeg(args{:}, 'prefetch') ;
+		data = [] ;
+	else
+		data = vl_imreadjpeg(args{:}) ;
+		data = bsxfun(@minus, data{1}, permute(opts.meanImg, [1 3 2])) ;
+    if ~isequal(opts.std, [1, 1, 1])
+      data = bsxfun(@rdivide, data, permute(opts.std, [1 3 2])) ;
+    end
+	end

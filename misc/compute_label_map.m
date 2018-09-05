@@ -1,7 +1,7 @@
 function compute_label_map(varargin)
 % COMPUTE_LABEL_MAP Determines the ILVSRC mapping used in SENets
-%   COMPUTE_LABEL_MAP aims to invert the ILSVRC mapping from the 
-%   order used to train the public SENEt models to the standard
+%   COMPUTE_LABEL_MAP aims to invert the ILSVRC mapping from the
+%   order used to train the public SENet models to the standard
 %   ASCII-ordering convention
 %
 % Copyright (C) 2017 Samuel Albanie
@@ -32,9 +32,10 @@ function compute_label_map(varargin)
   gtImNames = data{1} ; gtLabels = data{2} + 1 ; % fix offset
 
   % trim stems for comparison
-  valIdx = imdb.images.set == 2 ; valNames = imdb.images.name(valIdx) ; 
-  imNames = cellfun(@getImName, valNames, 'Uni', 0) ; 
-  valLabels = imdb.images.label(valIdx) ; 
+  valIdx = imdb.images.set == 2 ;
+  valNames = imdb.images.name(valIdx) ;
+  imNames = cellfun(@getImName, valNames, 'Uni', 0) ;
+  valLabels = imdb.images.label(valIdx) ;
 
   % create map - favour safety over speed here
   labelMap = zeros(1, opts.numClasses) ;
@@ -43,7 +44,7 @@ function compute_label_map(varargin)
     [member, idx] = ismember(imName, gtImNames) ;
     assert(member, 'unrecognised val image') ;
     srcLabel = valLabels(ii) ; destLabel = gtLabels(idx) ;
-    if labelMap(srcLabel) ~= 0 
+    if labelMap(srcLabel) ~= 0
       assert(labelMap(srcLabel) == destLabel, 'inconsistent label map') ;
     else
       labelMap(srcLabel) = destLabel ;
@@ -53,7 +54,7 @@ function compute_label_map(varargin)
 
   % check for completeness
   assert(numel(unique(labelMap)) == numel(labelMap), 'incomplete mapping') ;
- 
+
   % store label map to disk
   fid = fopen(mapFile, 'w') ; fprintf(fid, '%d\n', labelMap) ; fclose(fid) ;
 
